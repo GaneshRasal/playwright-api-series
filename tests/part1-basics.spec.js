@@ -1,4 +1,4 @@
-const {test, expect} = require('@playwright/test');
+import { test, expect } from '@playwright/test';
 test.describe('Part 1: Playwright Zero-Browser API Fundamentals',() =>{
 
 test('GET /posts/1 - Retrieve single resource', async ({request}) =>{
