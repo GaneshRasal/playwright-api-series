@@ -30,14 +30,18 @@ export default defineConfig({
     },
   },
   projects: [
+    // --- 1. Specialized Auth Projects (Part 3) ---
     {
-      // 1. The Setup Project: Runs first
       name: "setup",
-      testMatch: /.*\.setup\.js/,
+      testMatch: /.*auth\.setup\.js/,
     },
-    // 2. Project for Basic Auth tests
     {
-      name: "basic-auth-tests",
+      name: "bearer-tests",
+      dependencies: ["setup"],
+      testMatch: /.*bearer\.spec\.js/,
+    },
+    {
+      name: "basic-auth",
       testMatch: /.*basic-auth\.spec\.js/,
       use: {
         httpCredentials: {
@@ -46,10 +50,8 @@ export default defineConfig({
         },
       },
     },
-
-    // 3. Project for API Key tests
     {
-      name: "api-key-tests",
+      name: "api-key",
       testMatch: /.*api-key\.spec\.js/,
       use: {
         extraHTTPHeaders: {
@@ -58,11 +60,16 @@ export default defineConfig({
       },
     },
 
-    // 4. Project for Bearer Token tests
+    // --- 2. Catch-All / Standard API Project (Part 4, 5, 6, & other tests) ---
     {
-      name: "bearer-token-tests",
-      testMatch: /.*bearer\.spec\.js/,
-      dependencies: ["setup"],
+      name: "general-api",
+      testMatch: /.*\.spec\.js/,
+      // Ignore the custom auth specs so they don't run twice
+      testIgnore: [
+        /.*basic-auth\.spec\.js/,
+        /.*api-key\.spec\.js/,
+        /.*bearer\.spec\.js/,
+      ],
     },
   ],
 });
